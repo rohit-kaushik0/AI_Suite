@@ -28,12 +28,16 @@ const Slider = React.forwardRef<HTMLInputElement, SliderProps>(
             </span>
           </div>
         )}
-        <div className="relative py-3">
+        <div className="relative py-2">
           {/* Track background */}
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full h-3 bg-muted/60 rounded-full shadow-inner" />
+          <div className="absolute inset-0 flex items-center pointer-events-none">
+            <div className="w-full h-3 bg-muted/60 rounded-full" />
+          </div>
+          
+          {/* Progress track */}
+          <div className="absolute inset-0 flex items-center pointer-events-none">
             <div 
-              className="absolute h-3 bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-300 ease-out shadow-sm"
+              className="h-3 bg-gradient-to-r from-primary to-primary/80 rounded-full transition-all duration-200 ease-out"
               style={{ width: `${percentage}%` }}
             />
           </div>
