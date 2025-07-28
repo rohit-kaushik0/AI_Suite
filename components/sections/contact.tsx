@@ -196,7 +196,7 @@ const Contact = () => {
                       Message sent successfully!
                     </h3>
                     <p className="text-muted-foreground">
-                      We'll get back to you within 2 hours during business hours.
+                      We&apos;ll get back to you within 2 hours during business hours.
                     </p>
                   </motion.div>
                 ) : (
@@ -311,7 +311,7 @@ const Contact = () => {
 
                     <p className="text-xs text-muted-foreground text-center">
                       By submitting this form, you agree to our privacy policy. 
-                      We'll never share your information with third parties.
+                      We&apos;ll never share your information with third parties.
                     </p>
                   </form>
                 )}
