@@ -23,7 +23,7 @@ const testimonials = [
     title: "CEO",
     company: "GrowthLab",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    content: "The automation features saved us countless hours every week. Our team can now focus on strategy while the AI handles campaign optimization. It's like having a marketing genius on autopilot.",
+    content: "The automation features saved us countless hours every week. Our team can now focus on strategy while the AI handles campaign optimization. It&apos;s like having a marketing genius on autopilot.",
     rating: 5,
   },
   {
@@ -131,18 +131,16 @@ const Testimonials = () => {
 
                   {/* Content */}
                   <p className="text-lg md:text-xl text-foreground mb-8 leading-relaxed font-medium max-w-4xl mx-auto">
-                    "{testimonials[currentIndex].content}"
+                    &quot;{testimonials[currentIndex].content}&quot;
                   </p>
 
                   {/* Author */}
                   <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                     <div className="relative">
                       <div className="w-16 h-16 rounded-full overflow-hidden ring-4 ring-primary/20">
-                        <img
-                          src={testimonials[currentIndex].image}
-                          alt={testimonials[currentIndex].name}
-                          className="w-full h-full object-cover"
-                        />
+                        <div className="w-full h-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold text-lg">
+                          {testimonials[currentIndex].name.split(' ').map(n => n[0]).join('')}
+                        </div>
                       </div>
                     </div>
                     <div className="text-center sm:text-left">

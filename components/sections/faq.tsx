@@ -81,7 +81,7 @@ const FAQ = () => {
           </h2>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Got questions? We've got answers. If you can't find what you're looking for, 
+            Got questions? We&apos;ve got answers. If you can&apos;t find what you&apos;re looking for, 
             our support team is always here to help.
           </p>
         </motion.div>

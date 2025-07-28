@@ -121,7 +121,7 @@ const BlogResources = () => {
           transition={{ duration: 0.6 }}
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
-          {categories.map((category, index) => (
+          {categories.map((category) => (
             <button
               key={category.name}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
@@ -239,15 +239,15 @@ const BlogResources = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {resources.map((resource, index) => {
-              const Icon = resource.icon
-              return (
+                                {resources.map((resource, resourceIndex) => {
+                      const Icon = resource.icon
+                      return (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                                          key={resourceIndex}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: resourceIndex * 0.1 }}
                   whileHover={{ y: -5 }}
                   className="group"
                 >

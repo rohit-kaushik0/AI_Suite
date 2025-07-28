@@ -3,7 +3,6 @@
 import { motion } from "framer-motion"
 import { ArrowRight, Play, Sparkles, Zap, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 
 const Hero = () => {
   return (
