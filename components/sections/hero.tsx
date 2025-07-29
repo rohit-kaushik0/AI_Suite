@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { ArrowRight, Play, Sparkles, Zap, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { handleRouteAction, routes } from "@/lib/routes"
 
 const Hero = () => {
   return (
@@ -55,7 +56,7 @@ const Hero = () => {
       </div>
 
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="flex flex-col justify-center items-center min-h-[80vh] space-y-8">
+        <div className="flex flex-col justify-center items-center min-h-[80vh] space-y-8 pb-20">
           {/* Fixed Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -106,6 +107,7 @@ const Hero = () => {
             <Button 
               size="xl" 
               className="group bg-white text-black hover:bg-white/90 shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto min-w-[200px]"
+              onClick={() => handleRouteAction(routes.cta.startTrial)}
             >
               Start Free Trial
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -115,6 +117,7 @@ const Hero = () => {
               size="xl" 
               variant="outline"
               className="bg-white/10 border-white/30 text-white hover:bg-white/20 backdrop-blur-sm w-full sm:w-auto min-w-[180px]"
+              onClick={() => handleRouteAction(routes.cta.watchDemo)}
             >
               <Play className="mr-2 h-5 w-5" />
               Watch Demo
@@ -160,7 +163,7 @@ const Hero = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
       >
         <motion.div
           animate={{ y: [0, 10, 0] }}

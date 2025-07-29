@@ -1,57 +1,91 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useState } from "react"
 import { 
   Mail, 
   Phone, 
   MapPin, 
   Twitter, 
   Linkedin, 
-  Github, 
   Instagram,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  Youtube,
+  Facebook,
+  CheckCircle
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { handleRouteAction, routes, scrollToSection } from "@/lib/routes"
 
 const Footer = () => {
+  const [email, setEmail] = useState("")
+  const [isSubscribed, setIsSubscribed] = useState(false)
+  const [isSubscribing, setIsSubscribing] = useState(false)
+
+  const handleNewsletterSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email || isSubscribing) return
+
+    setIsSubscribing(true)
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    setIsSubscribed(true)
+    setEmail("")
+    setIsSubscribing(false)
+
+    // Reset success message after 3 seconds
+    setTimeout(() => setIsSubscribed(false), 3000)
+  }
+
   const footerLinks = {
     product: [
-      { name: "Features", href: "#features" },
-      { name: "Pricing", href: "#pricing" },
-      { name: "Integrations", href: "#integrations" },
-      { name: "API Docs", href: "#api" },
-      { name: "Changelog", href: "#changelog" },
+      { name: "Features", href: routes.navigation.features, external: false },
+      { name: "Pricing", href: routes.navigation.pricing, external: false },
+      { name: "Integrations", href: routes.external.documentation, external: true },
+      { name: "API Docs", href: routes.external.api, external: true },
+      { name: "Changelog", href: routes.external.documentation, external: true },
     ],
     company: [
-      { name: "About Us", href: "#about" },
-      { name: "Careers", href: "#careers" },
-      { name: "Press", href: "#press" },
-      { name: "Blog", href: "#blog" },
-      { name: "Partners", href: "#partners" },
+      { name: "About Us", href: "#about", external: false },
+      { name: "Careers", href: "#careers", external: false },
+      { name: "Press", href: "#press", external: false },
+      { name: "Blog", href: "#blog", external: false },
+      { name: "Partners", href: "#partners", external: false },
     ],
     resources: [
-      { name: "Documentation", href: "#docs" },
-      { name: "Help Center", href: "#help" },
-      { name: "Community", href: "#community" },
-      { name: "Webinars", href: "#webinars" },
-      { name: "Case Studies", href: "#cases" },
+      { name: "Documentation", href: routes.external.documentation, external: true },
+      { name: "Help Center", href: routes.external.support, external: true },
+      { name: "Community", href: "#community", external: false },
+      { name: "Webinars", href: "#webinars", external: false },
+      { name: "Case Studies", href: "#cases", external: false },
     ],
     legal: [
-      { name: "Privacy Policy", href: "#privacy" },
-      { name: "Terms of Service", href: "#terms" },
-      { name: "Cookie Policy", href: "#cookies" },
-      { name: "GDPR", href: "#gdpr" },
-      { name: "Security", href: "#security" },
+      { name: "Privacy Policy", href: "#privacy", external: false },
+      { name: "Terms of Service", href: "#terms", external: false },
+      { name: "Cookie Policy", href: "#cookies", external: false },
+      { name: "GDPR", href: "#gdpr", external: false },
+      { name: "Security", href: "#security", external: false },
     ],
   }
 
+  const handleLinkClick = (link: { href: string; external: boolean }) => {
+    if (link.external) {
+      handleRouteAction({ type: 'external', target: link.href })
+    } else if (link.href.startsWith('#')) {
+      scrollToSection(link.href)
+    }
+  }
+
   const socialLinks = [
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Github, href: "#", label: "GitHub" },
-    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Facebook, href: "https://facebook.com/admybrand", label: "Facebook" },
+    { icon: Twitter, href: "https://x.com/admybrand?lang=en", label: "Twitter" },
+    { icon: Linkedin, href: "https://linkedin.com/company/admybrand", label: "LinkedIn" },
+    { icon: Youtube, href: "https://www.youtube.com/channel/UCEKgVQ1MeZx3lpyDqGtW30g", label: "YouTube" },
+    { icon: Instagram, href: "https://instagram.com/admybrand", label: "Instagram" },
   ]
 
   return (
@@ -74,17 +108,41 @@ const Footer = () => {
               delivered straight to your inbox.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
-              <Input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1 h-12"
-              />
-              <Button size="lg" className="group whitespace-nowrap">
-                Subscribe
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
+            {isSubscribed ? (
+              <div className="flex items-center justify-center gap-2 text-green-600 mb-4">
+                <CheckCircle className="w-5 h-5" />
+                <span className="font-medium">Successfully subscribed! Check your inbox.</span>
+              </div>
+            ) : (
+              <form onSubmit={handleNewsletterSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+                <Input
+                  type="email"
+                  placeholder="Enter your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="flex-1 h-12"
+                  required
+                />
+                <Button 
+                  type="submit"
+                  size="lg" 
+                  className="group whitespace-nowrap"
+                  disabled={isSubscribing || !email}
+                >
+                  {isSubscribing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                      Subscribing...
+                    </>
+                  ) : (
+                    <>
+                      Subscribe
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
             
             <p className="text-xs text-muted-foreground mt-4">
               No spam, unsubscribe at any time. Privacy-first approach.
@@ -151,12 +209,12 @@ const Footer = () => {
                 <ul className="space-y-4">
                   {footerLinks.product.map((link) => (
                     <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium"
+                      <button
+                        onClick={() => handleLinkClick(link)}
+                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium text-left"
                       >
                         {link.name}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -173,12 +231,12 @@ const Footer = () => {
                 <ul className="space-y-4">
                   {footerLinks.company.map((link) => (
                     <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium"
+                      <button
+                        onClick={() => handleLinkClick(link)}
+                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium text-left"
                       >
                         {link.name}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -195,12 +253,12 @@ const Footer = () => {
                 <ul className="space-y-4">
                   {footerLinks.resources.map((link) => (
                     <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium"
+                      <button
+                        onClick={() => handleLinkClick(link)}
+                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium text-left"
                       >
                         {link.name}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -217,12 +275,12 @@ const Footer = () => {
                 <ul className="space-y-4">
                   {footerLinks.legal.map((link) => (
                     <li key={link.name}>
-                      <a
-                        href={link.href}
-                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium"
+                      <button
+                        onClick={() => handleLinkClick(link)}
+                        className="text-muted-foreground hover:text-primary transition-colors duration-200 text-sm font-medium text-left"
                       >
                         {link.name}
-                      </a>
+                      </button>
                     </li>
                   ))}
                 </ul>

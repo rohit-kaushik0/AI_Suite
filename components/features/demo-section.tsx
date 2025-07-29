@@ -1,45 +1,53 @@
 "use client"
 
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { useState } from "react"
-import { Play, X, Monitor, Smartphone, Users, BarChart3, Zap, ArrowRight } from "lucide-react"
+import { Play, X, Monitor, Smartphone, Users, BarChart3, Zap, ArrowRight, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Modal } from "@/components/ui/modal"
+import { handleRouteAction, routes } from "@/lib/routes"
+import { generateAIVideo, videoConfigs, VideoContent } from "@/lib/openai-video"
 
 const DemoSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeDemo, setActiveDemo] = useState(0)
+  const [currentVideo, setCurrentVideo] = useState<VideoContent | null>(null)
+  const [isLoadingVideo, setIsLoadingVideo] = useState(false)
 
   const demoFeatures = [
     {
       icon: BarChart3,
       title: "AI Analytics Dashboard",
       description: "See how our AI provides real-time insights and predictions",
-      duration: "2:30",
-      color: "from-blue-500 to-purple-600"
+      duration: "3:00",
+      color: "from-blue-500 to-purple-600",
+      config: videoConfigs.aiAnalytics
     },
     {
       icon: Users,
       title: "Customer Segmentation",
       description: "Watch AI automatically group customers for targeted campaigns",
-      duration: "1:45",
-      color: "from-green-500 to-blue-500"
+      duration: "2:00",
+      color: "from-green-500 to-blue-500",
+      config: videoConfigs.customerSegmentation
     },
     {
       icon: Zap,
       title: "Campaign Automation",
       description: "See campaigns optimize themselves in real-time",
-      duration: "3:15",
-      color: "from-purple-500 to-pink-500"
+      duration: "3:00",
+      color: "from-purple-500 to-pink-500",
+      config: videoConfigs.campaignAutomation
     },
     {
       icon: Monitor,
       title: "Multi-Channel Setup",
       description: "Watch how easy it is to set up cross-platform campaigns",
       duration: "2:00",
-      color: "from-orange-500 to-red-500"
+      color: "from-orange-500 to-red-500",
+      config: videoConfigs.multiChannel
     }
   ]
 
@@ -49,6 +57,44 @@ const DemoSection = () => {
     { value: "50K+", label: "Happy Users", icon: Users },
     { value: "99.9%", label: "Uptime", icon: Monitor }
   ]
+
+  // Load AI video when modal opens
+  const handleWatchDemo = async (demoIndex: number = 0) => {
+    setIsLoadingVideo(true)
+    setIsModalOpen(true)
+    setActiveDemo(demoIndex)
+    
+    try {
+      const video = await generateAIVideo(demoFeatures[demoIndex].config)
+      setCurrentVideo(video)
+    } catch (error) {
+      console.error('Failed to load video:', error)
+      // Fallback to placeholder
+      setCurrentVideo({
+        title: demoFeatures[demoIndex].title,
+        description: demoFeatures[demoIndex].description,
+        duration: demoFeatures[demoIndex].duration
+      })
+    } finally {
+      setIsLoadingVideo(false)
+    }
+  }
+
+  const handleDemoSelect = async (index: number) => {
+    if (index !== activeDemo) {
+      setIsLoadingVideo(true)
+      setActiveDemo(index)
+      
+      try {
+        const video = await generateAIVideo(demoFeatures[index].config)
+        setCurrentVideo(video)
+      } catch (error) {
+        console.error('Failed to load video:', error)
+      } finally {
+        setIsLoadingVideo(false)
+      }
+    }
+  }
 
   return (
     <>
@@ -93,7 +139,7 @@ const DemoSection = () => {
               transition={{ duration: 0.8 }}
               className="relative"
             >
-              <div className="relative group cursor-pointer" onClick={() => setIsModalOpen(true)}>
+              <div className="relative group cursor-pointer" onClick={() => handleWatchDemo(0)}>
                 {/* Video Thumbnail */}
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-primary/20 to-accent/20">
                   <div className="aspect-video bg-gradient-mesh opacity-90" />
@@ -143,9 +189,10 @@ const DemoSection = () => {
                   <Button 
                     size="lg" 
                     className="shadow-xl hover:shadow-2xl transition-all duration-300"
+                    onClick={() => handleWatchDemo(0)}
                   >
                     <Play className="mr-2 h-4 w-4" />
-                    Watch 3-Min Demo
+                    Watch AI Demo
                   </Button>
                 </motion.div>
               </div>
@@ -172,7 +219,10 @@ const DemoSection = () => {
                       whileHover={{ x: 10 }}
                       className="group"
                     >
-                      <Card className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer border-l-4 border-l-transparent hover:border-l-primary">
+                      <Card 
+                        className="p-6 hover:shadow-xl transition-all duration-300 cursor-pointer border-l-4 border-l-transparent hover:border-l-primary"
+                        onClick={() => handleWatchDemo(index)}
+                      >
                         <div className="flex items-start space-x-4">
                           <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${feature.color} flex items-center justify-center`}>
                             <Icon className="w-6 h-6 text-white" />
@@ -233,15 +283,30 @@ const DemoSection = () => {
               Experience Different Views
             </h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="outline" size="lg" className="group">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="group"
+                onClick={() => handleWatchDemo(3)}
+              >
                 <Monitor className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 Desktop Demo
               </Button>
-              <Button variant="outline" size="lg" className="group">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="group"
+                onClick={() => handleWatchDemo(1)}
+              >
                 <Smartphone className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 Mobile Demo
               </Button>
-              <Button variant="gradient" size="lg" className="group">
+              <Button 
+                variant="gradient" 
+                size="lg" 
+                className="group"
+                onClick={() => handleRouteAction(routes.cta.scheduleDemo)}
+              >
                 <Users className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 Live Session
               </Button>
@@ -253,53 +318,77 @@ const DemoSection = () => {
       {/* Demo Video Modal */}
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false)
+          setCurrentVideo(null)
+        }}
         title=""
         size="xl"
         className="max-w-6xl bg-black/95 backdrop-blur-md border-gray-800 mx-4"
       >
         <div className="relative space-y-6">
-          {/* Single Enhanced Close Button */}
+          {/* Enhanced Close Button */}
           <button
-            onClick={() => setIsModalOpen(false)}
+            onClick={() => {
+              setIsModalOpen(false)
+              setCurrentVideo(null)
+            }}
             className="absolute -top-12 -right-12 z-[110] p-4 rounded-full bg-white text-black hover:bg-gray-100 transition-all duration-200 shadow-2xl border-2 border-gray-200 hover:scale-110"
             aria-label="Close demo"
           >
             <X className="w-6 h-6 font-bold" />
           </button>
 
-          {/* Video Player Placeholder */}
+          {/* AI Video Player */}
           <div className="relative rounded-xl overflow-hidden bg-black aspect-video border border-gray-700">
-            
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center text-white">
-                <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-medium">Demo Video Player</p>
-                <p className="text-sm opacity-75">3-minute product demonstration</p>
-                <div className="mt-4 flex items-center justify-center gap-4 text-xs opacity-75">
-                  <span>Press ESC to close</span>
-                  <span>•</span>
-                  <span>Click white X button</span>
-                  <span>•</span>
-                  <span>Click outside to close</span>
+            {isLoadingVideo ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <Loader2 className="w-16 h-16 mx-auto mb-4 animate-spin text-primary" />
+                  <p className="text-lg font-medium">Generating AI Demo Video...</p>
+                  <p className="text-sm opacity-75">Creating personalized content</p>
                 </div>
               </div>
-            </div>
+            ) : currentVideo ? (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <Play className="w-16 h-16 mx-auto mb-4 opacity-75 text-primary" />
+                  <p className="text-xl font-medium mb-2">{currentVideo.title}</p>
+                  <p className="text-sm opacity-75 mb-4">{currentVideo.description}</p>
+                  <Badge variant="secondary" className="mb-4">
+                    Duration: {currentVideo.duration}
+                  </Badge>
+                  <div className="mt-4 text-xs opacity-75">
+                    <p>🎬 AI-Generated Demo Content</p>
+                    <p>Enhanced with OpenAI technology</p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-white">
+                  <Play className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                  <p className="text-lg font-medium">AI Demo Player</p>
+                  <p className="text-sm opacity-75">Select a demo to watch</p>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Demo Navigation */}
+          {/* Enhanced Demo Navigation */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {demoFeatures.map((feature, index) => {
               const Icon = feature.icon
               return (
                 <button
                   key={index}
-                  onClick={() => setActiveDemo(index)}
+                  onClick={() => handleDemoSelect(index)}
+                  disabled={isLoadingVideo}
                   className={`p-3 rounded-lg text-left transition-all duration-200 ${
                     activeDemo === index
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-muted hover:bg-muted/80'
-                  }`}
+                  } ${isLoadingVideo ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <Icon className="w-5 h-5 mb-2" />
                   <div className="text-sm font-medium">{feature.title}</div>
@@ -309,13 +398,26 @@ const DemoSection = () => {
             })}
           </div>
 
-          {/* CTA */}
+          {/* Enhanced CTA */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
-            <Button className="flex-1">
+            <Button 
+              className="flex-1"
+              onClick={() => {
+                setIsModalOpen(false)
+                handleRouteAction(routes.cta.startTrial)
+              }}
+            >
               Start Free Trial
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button variant="outline" className="flex-1">
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={() => {
+                setIsModalOpen(false)
+                handleRouteAction(routes.cta.scheduleDemo)
+              }}
+            >
               Schedule Live Demo
             </Button>
           </div>

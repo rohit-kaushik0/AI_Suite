@@ -2,9 +2,10 @@
 
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
-import { Menu, X, Sparkles, ChevronDown } from "lucide-react"
+import { Menu, X, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { scrollToSection, handleRouteAction, routes } from "@/lib/routes"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -43,21 +44,14 @@ const Navbar = () => {
   }, [isOpen])
 
   const navigationItems = [
-    { name: "Features", href: "#features" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "Testimonials", href: "#testimonials" },
-    { name: "FAQ", href: "#faq" },
+    { name: "Features", href: routes.navigation.features },
+    { name: "Pricing", href: routes.navigation.pricing },
+    { name: "Testimonials", href: routes.navigation.testimonials },
+    { name: "FAQ", href: routes.navigation.faq },
   ]
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href) as HTMLElement
-    if (element) {
-      const offsetTop = element.offsetTop - 80 // Account for fixed navbar height
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth"
-      })
-    }
+  const handleNavigation = (href: string) => {
+    scrollToSection(href, 80)
     setIsOpen(false)
   }
 
@@ -92,7 +86,7 @@ const Navbar = () => {
               {navigationItems.map((item) => (
                 <motion.button
                   key={item.name}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => handleNavigation(item.href)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="text-white/90 hover:text-white font-medium transition-colors relative group whitespace-nowrap navbar-text"
@@ -109,7 +103,7 @@ const Navbar = () => {
                 variant="ghost" 
                 size="sm"
                 className="text-white hover:text-white hover:bg-white/10 whitespace-nowrap"
-                onClick={() => scrollToSection("#contact")}
+                onClick={() => handleRouteAction(routes.cta.contactSales)}
               >
                 Contact Sales
               </Button>
@@ -117,6 +111,7 @@ const Navbar = () => {
                 variant="glass"
                 size="sm"
                 className="text-white border-white/30 hover:bg-white/20 whitespace-nowrap"
+                onClick={() => handleRouteAction(routes.cta.startTrial)}
               >
                 Start Free Trial
               </Button>
@@ -128,6 +123,7 @@ const Navbar = () => {
                 variant="glass"
                 size="sm"
                 className="text-white border-white/30 hover:bg-white/20"
+                onClick={() => handleRouteAction(routes.cta.startTrial)}
               >
                 Get Started
               </Button>
@@ -165,7 +161,7 @@ const Navbar = () => {
                 {navigationItems.map((item, index) => (
                   <motion.button
                     key={item.name}
-                    onClick={() => scrollToSection(item.href)}
+                    onClick={() => handleNavigation(item.href)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -184,14 +180,20 @@ const Navbar = () => {
                   <Button 
                     variant="outline" 
                     className="w-full bg-transparent border-white/30 text-white hover:bg-white/10"
-                    onClick={() => scrollToSection("#contact")}
+                    onClick={() => {
+                      handleRouteAction(routes.cta.contactSales)
+                      setIsOpen(false)
+                    }}
                   >
                     Contact Sales
                   </Button>
                   <Button 
                     variant="default" 
                     className="w-full"
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => {
+                      handleRouteAction(routes.cta.startTrial)
+                      setIsOpen(false)
+                    }}
                   >
                     Start Free Trial
                   </Button>
