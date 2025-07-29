@@ -2,11 +2,9 @@
 
 A next-generation landing page for an AI-powered marketing automation platform, built with cutting-edge web technologies and 2025 design trends.
 
-![ADmyBRAND AI Suite](https://via.placeholder.com/1200x600/6366f1/ffffff?text=ADmyBRAND+AI+Suite)
-
 ## 🚀 Live Demo
 
-**[View Live Demo →](https://your-demo-link.vercel.app)**
+**[View Live Demo →](https://ai-suite-kappa.vercel.app/)**
 
 ## ✨ Features
 
@@ -132,17 +130,7 @@ pnpm start
 - **Smooth page transitions** and micro-interactions
 - **Performance optimized** with proper animation controls
 
-## 🚀 Deployment
 
-### Vercel (Recommended)
-1. Push code to GitHub repository
-2. Connect repository to Vercel
-3. Deploy with automatic builds
-
-### Other Platforms
-- **Netlify**: Drag & drop the `out` folder after running `pnpm build`
-- **GitHub Pages**: Use with static export configuration
-- **Railway/Render**: Node.js deployment with build scripts
 
 ## 📁 Project Structure
 
@@ -174,37 +162,8 @@ ai_suite/
 └── public/                  # Static assets
 ```
 
-## 🎨 Customization
 
-### Colors & Theming
-Modify CSS variables in `app/globals.css`:
-```css
-:root {
-  --primary: 220 90% 60%;     /* Blue primary */
-  --accent: 280 85% 65%;      /* Purple accent */
-  --background: 0 0% 100%;    /* White background */
-  /* ... more variables */
-}
-```
 
-### Content Updates
-- Update text content directly in component files
-- Modify pricing tiers in `pricing-calculator.tsx`
-- Change testimonials in `testimonials.tsx`
-- Update FAQ items in `faq.tsx`
-
-### Adding New Sections
-1. Create component in `components/sections/`
-2. Import and add to `app/page.tsx`
-3. Follow existing pattern for animations and styling
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📄 License
 
