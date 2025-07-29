@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { handleRouteAction, routes } from "@/lib/routes"
 
 const pricingPlans = [
   {
@@ -42,6 +43,7 @@ const pricingPlans = [
       { name: "White-label solution", included: false }
     ],
     cta: "Start Free Trial",
+    ctaAction: routes.cta.startTrial,
     highlight: "Most popular for startups"
   },
   {
@@ -65,7 +67,8 @@ const pricingPlans = [
       { name: "Custom integrations", included: false },
       { name: "White-label solution", included: false }
     ],
-    cta: "Start Free Trial",
+    cta: "Start Free Trial", 
+    ctaAction: routes.cta.startTrial,
     highlight: "Best value for growth"
   },
   {
@@ -90,6 +93,7 @@ const pricingPlans = [
       { name: "White-label solution", included: true }
     ],
     cta: "Contact Sales",
+    ctaAction: routes.cta.contactSales,
     highlight: "Maximum flexibility"
   }
 ]
@@ -121,7 +125,7 @@ const Pricing = () => {
           
           <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-8">
             Choose the perfect plan for
-            <span className="text-gradient block space-x-2S">your business growth</span>
+            <span className="text-gradient block">your business growth</span>
           </h2>
           
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-12">
@@ -141,10 +145,10 @@ const Pricing = () => {
                 className="absolute top-1 bottom-1 bg-background rounded-lg shadow-lg border border-border/10"
                 initial={false}
                 animate={{
-                  x: isYearly ? "calc(50% - 1px)" : "1px",
-                  width: "calc(50% - 2px)"
+                  x: isYearly ? "calc(90% + 1px)" : "1px",
+                  width: "calc(50% - 1px)"
                 }}
-                transition={{ type: "spring", stiffness: 400, damping: 40 }}
+                transition={{ type: "spring", stiffness: 100, damping: 10 }}
               />
               <button
                 onClick={() => setIsYearly(false)}
@@ -274,6 +278,7 @@ const Pricing = () => {
                       className={`w-full ${plan.popular ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600' : ''} group`}
                       variant={plan.popular ? "default" : "outline"}
                       size="lg"
+                      onClick={() => handleRouteAction(plan.ctaAction)}
                     >
                       {plan.cta}
                       <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />

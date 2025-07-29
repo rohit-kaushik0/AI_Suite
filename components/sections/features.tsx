@@ -16,6 +16,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { handleRouteAction, routes } from "@/lib/routes"
 
 const features = [
   {
@@ -190,7 +191,10 @@ const Features = () => {
 
                     {/* Learn more link */}
                     <div className="pt-4">
-                      <button className={`text-sm font-medium ${feature.color} hover:underline group-hover:translate-x-1 transition-transform duration-300 flex items-center`}>
+                      <button 
+                        onClick={() => handleRouteAction({ type: 'external', target: routes.external.documentation })}
+                        className={`text-sm font-medium ${feature.color} hover:underline group-hover:translate-x-1 transition-transform duration-300 flex items-center`}
+                      >
                         Learn more
                         <ArrowRight className="w-3 h-3 ml-1" />
                       </button>
@@ -233,11 +237,19 @@ const Features = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="group">
+              <Button 
+                size="lg" 
+                className="group"
+                onClick={() => handleRouteAction(routes.cta.startTrial)}
+              >
                 Start Free Trial
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg">
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => handleRouteAction(routes.cta.scheduleDemo)}
+              >
                 Schedule Demo
               </Button>
             </div>
